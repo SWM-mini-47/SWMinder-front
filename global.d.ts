@@ -9,3 +9,9 @@ interface Post {
   author: string;
   url: string;
 }
+
+interface PostFilter {
+  mentoring: boolean;
+  meetup: boolean;
+  board: boolean;
+}
