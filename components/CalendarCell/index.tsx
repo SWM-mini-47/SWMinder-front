@@ -5,6 +5,7 @@ interface CalendarCellProps {
   day: number;
   posts: Post[];
   enabled: boolean;
+  highlight?: boolean;
 }
 
 interface CellPostProps {
@@ -12,14 +13,14 @@ interface CellPostProps {
 }
 
 const style = {
-  cell: (enabled: boolean) => css`
+  cell: (enabled: boolean, highlight: boolean) => css`
     box-sizing: border-box;
     position: relative;
     overflow: hidden;
     width: 155px;
     height: 147px;
-    background-color: ${enabled ? '#FFF' : '#EEE'};
-    border: 1px solid #e9e9e9;
+    background-color: ${highlight ? '#eef7ff' : enabled ? '#FFF' : '#EEE'};
+    border: 1px solid ${highlight ? '#0084ff' : '#e9e9e9'};
   `,
   day: css`
     font-size: 18px;
@@ -50,9 +51,14 @@ const style = {
   `,
 };
 
-export default function CalendarCell({ day, posts, enabled }: CalendarCellProps) {
+export default function CalendarCell({
+  day,
+  posts,
+  enabled,
+  highlight = false,
+}: CalendarCellProps) {
   return enabled ? (
-    <div css={style.cell(enabled)}>
+    <div css={style.cell(enabled, highlight)}>
       <p css={style.day}>{day}</p>
       <div css={style.postsContainer}>
         {posts.map((post) => {
@@ -61,7 +67,7 @@ export default function CalendarCell({ day, posts, enabled }: CalendarCellProps)
       </div>
     </div>
   ) : (
-    <div css={style.cell(enabled)} />
+    <div css={style.cell(enabled, false)} />
   );
 }
 
