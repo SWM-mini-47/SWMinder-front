@@ -51,7 +51,7 @@ const style = {
 };
 
 export default function CalendarCell({ day, posts, enabled }: CalendarCellProps) {
-  return (
+  return enabled ? (
     <div css={style.cell(enabled)}>
       <p css={style.day}>{day}</p>
       <div css={style.postsContainer}>
@@ -60,6 +60,8 @@ export default function CalendarCell({ day, posts, enabled }: CalendarCellProps)
         })}
       </div>
     </div>
+  ) : (
+    <div css={style.cell(enabled)} />
   );
 }
 
