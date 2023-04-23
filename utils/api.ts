@@ -31,7 +31,29 @@ export async function getPostsByDate(date: Date) {
     created: date,
     scheduled: new Date(2023, 3, 26),
     author: 'asdf',
+    url: 'https://google.com/',
   });
+}
+
+export async function getPostsByMonth(date: Date) {
+  // return (
+  //   await axiosInstance.get(`/posts/${date.getFullYear()}/${date.getMonth() + 1}`)
+  // ).data;
+
+  const daysInMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+
+  return new Array(daysInMonth).fill([
+    {
+      title: 'asdf',
+      type: 'mentoring',
+      currentCount: 1,
+      totalCount: 2,
+      created: date,
+      scheduled: new Date(2023, 3, 26),
+      author: 'asdf',
+      url: 'https://google.com/',
+    },
+  ]);
 }
 
 export function dday(date: Date) {
