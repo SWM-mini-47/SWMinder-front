@@ -28,18 +28,19 @@ export default function Calendar({ date, posts, cellClickCallback }: CalendarPro
         {Array.from({ length: 6 }).map((e, i) => {
           const rowOffset = i * 7 + 1;
           return (
-            <tr>
+            <tr key={`calendarRow${rowOffset}`}>
               {Array.from({ length: 7 }).map((e2, j) => {
                 const d = j + rowOffset - startOffset;
                 if (d <= 0 || d > daysInMonth)
                   return (
-                    <td>
+                    <td key={`calendarCell${d}`}>
                       <CalendarCell day={0} posts={[]} enabled={false} />
                     </td>
                   );
                 else
                   return (
                     <td
+                      key={`calendarCell${d}`}
                       onClick={() => {
                         cellClickCallback(d - 1);
                       }}
