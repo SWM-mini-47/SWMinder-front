@@ -7,4 +7,5 @@ interface Post {
   created: Date;
   scheduled: Date;
   author: string;
+  url: string;
 }
