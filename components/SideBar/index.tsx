@@ -1,12 +1,14 @@
-import { selectedDate } from '@/states/dateContext';
+import { globalDate, globalPostFilter } from '@/states/dateContext';
 import { dday, formatDate, getPostsByDate } from '@/utils/api';
 import { GLOBAL_COLOR } from '@/utils/color';
 import { css } from '@emotion/react';
 import { useEffect, useState } from 'react';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import Handle from '@/assets/drag_handle.svg';
 
 interface SideBarProps {
   postCallback: (post: Post) => void;
+  handleCallback: () => void;
 }
 
 interface PostItemProps {
@@ -16,14 +18,17 @@ interface PostItemProps {
 
 const style = {
   container: css`
+    position: relative;
     display: flex;
     flex-direction: column;
     width: 100%;
     height: 100%;
     border: solid 1px #bbbbbb;
+    background-color: white;
     border-radius: 30px 30px 0 0;
   `,
   dateContainer: css`
+    margin-top: 50px;
     width: 100%;
     height: 60px;
     display: flex;
@@ -47,20 +52,6 @@ const style = {
     align-items: center;
 
     background-color: #ffffff;
-    /* width */
-    ::-webkit-scrollbar {
-      width: 10px;
-    }
-
-    /* Track */
-    ::-webkit-scrollbar-track {
-      background: #fff;
-    }
-
-    /* Handle */
-    ::-webkit-scrollbar-thumb {
-      background: #222222;
-    }
   `,
   item: css`
     display: flex;
@@ -123,11 +114,20 @@ const style = {
     width: 2px;
     background-color: #adadad;
   `,
+  handle: css`
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 50px;
+  `,
 };
 
-export default function SideBar({ postCallback }: SideBarProps) {
-  const [date, setDate] = useRecoilState(selectedDate);
+export default function SideBar({ postCallback, handleCallback }: SideBarProps) {
+  const [date, setDate] = useRecoilState(globalDate);
   const [posts, setPosts] = useState<Post[]>([]);
+  const globalFilter = useRecoilValue(globalPostFilter);
 
   useEffect(() => {
     (async () => {
@@ -137,6 +137,7 @@ export default function SideBar({ postCallback }: SideBarProps) {
 
   return (
     <div css={style.container}>
+      <Handle css={style.handle} onClick={() => handleCallback()} />
       <div css={style.dateContainer}>
         <button
           onClick={() => {
@@ -156,7 +157,7 @@ export default function SideBar({ postCallback }: SideBarProps) {
       </div>
       <div css={style.list}>
         {posts.map((e) => {
-          return <PostItem onClick={postCallback} post={e} />;
+          return globalFilter[e.type] ? <PostItem onClick={postCallback} post={e} /> : <></>;
         })}
       </div>
     </div>

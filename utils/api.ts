@@ -53,6 +53,36 @@ export async function getPostsByMonth(date: Date) {
       author: 'asdf',
       url: 'https://google.com/',
     },
+    {
+      title: 'asdf',
+      type: 'meetup',
+      currentCount: 1,
+      totalCount: 2,
+      created: date,
+      scheduled: new Date(2023, 3, 26),
+      author: 'asdf',
+      url: 'https://google.com/',
+    },
+    {
+      title: 'asdf',
+      type: 'board',
+      currentCount: 1,
+      totalCount: 2,
+      created: date,
+      scheduled: new Date(2023, 3, 26),
+      author: 'asdf',
+      url: 'https://google.com/',
+    },
+    {
+      title: 'asdf',
+      type: 'mentoring',
+      currentCount: 1,
+      totalCount: 2,
+      created: date,
+      scheduled: new Date(2023, 3, 26),
+      author: 'asdf',
+      url: 'https://google.com/',
+    },
   ]);
 }
 

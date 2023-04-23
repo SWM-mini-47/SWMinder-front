@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 interface ToggleButtonProps {
   text: string;
   color: string;
+  value: boolean;
   onToggle: (flag: boolean) => void;
 }
 
@@ -24,8 +25,8 @@ const style = (enabled: boolean, color: string) => css`
   }
 `;
 
-export default function ToggleButton({ text, color, onToggle }: ToggleButtonProps) {
-  const [enabled, setEnabled] = useState<boolean>(false);
+export default function ToggleButton({ text, color, onToggle, value }: ToggleButtonProps) {
+  const [enabled, setEnabled] = useState<boolean>(value);
 
   useEffect(() => {
     onToggle(enabled);

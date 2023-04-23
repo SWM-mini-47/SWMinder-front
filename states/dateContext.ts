@@ -1,7 +1,7 @@
 import { getPostsByDate, getPostsByMonth } from '@/utils/api';
 import { atom, selector } from 'recoil';
 
-export const selectedDate = atom<Date>({
+export const globalDate = atom<Date>({
   key: 'selectedDate',
   default: new Date(),
 });
@@ -9,6 +9,11 @@ export const selectedDate = atom<Date>({
 export const monthlyPosts = selector({
   key: 'posts',
   get: async ({ get }) => {
-    return await getPostsByMonth(get(selectedDate));
+    return await getPostsByMonth(get(globalDate));
   },
+});
+
+export const globalPostFilter = atom<PostFilter>({
+  key: 'filter',
+  default: { mentoring: true, meetup: true, board: true },
 });
