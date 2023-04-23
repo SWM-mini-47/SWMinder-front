@@ -3,15 +3,7 @@ import { css } from '@emotion/react';
 import Link from 'next/link';
 
 interface PostDetailProps {
-  id: string;
-  title: string;
-  author: string;
-  category: string;
-  created: Date;
-  scheduled: Date;
-  totalCount: number;
-  currentCount: number;
-  url: string;
+  post: Post;
   closeCallback: () => void;
 }
 
@@ -70,18 +62,7 @@ const style = {
   `,
 };
 
-export default function PostDetail({
-  id,
-  title,
-  author,
-  category,
-  created,
-  scheduled,
-  totalCount,
-  currentCount,
-  closeCallback,
-  url,
-}: PostDetailProps) {
+export default function PostDetail({ post, closeCallback }: PostDetailProps) {
   return (
     <>
       <div css={style.dim} />
@@ -90,24 +71,24 @@ export default function PostDetail({
           X
         </button>
         <h3>제목</h3>
-        <span>{title}</span>
+        <span>{post.title}</span>
         <div css={style.breaker} />
         <h3>분류</h3>
-        <span>{category}</span>
+        <span>{post.type}</span>
         <div css={style.breaker} />
         <h3>게시자</h3>
-        <span>{author}</span>
+        <span>{post.author}</span>
         <div css={style.breaker} />
         <h3>게시 일자</h3>
-        <span>{formatDate(created)}</span>
+        <span>{formatDate(post.created)}</span>
         <div css={style.breaker} />
         <h3>예정 일자</h3>
-        <span>{formatDate(scheduled)}</span>
+        <span>{formatDate(post.scheduled)}</span>
         <div css={style.breaker} />
         <h3>모집 현황</h3>
-        <span>{`${currentCount}/${totalCount}`}</span>
+        <span>{`${post.currentCount}/${post.totalCount}`}</span>
         <div css={style.breaker} />
-        <Link href={url}>접수하러 가기</Link>
+        <Link href={post.url}>접수하러 가기</Link>
         <div>
           {/* todo: comments */}
           <h3>댓글</h3>
