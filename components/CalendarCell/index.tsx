@@ -1,10 +1,13 @@
+import { globalPostFilter } from '@/states/dateContext';
 import { GLOBAL_COLOR } from '@/utils/color';
 import { css } from '@emotion/react';
+import { useRecoilValue } from 'recoil';
 
 interface CalendarCellProps {
   day: number;
   posts: Post[];
   enabled: boolean;
+  highlight?: boolean;
 }
 
 interface CellPostProps {
@@ -12,21 +15,23 @@ interface CellPostProps {
 }
 
 const style = {
-  cell: (enabled: boolean) => css`
+  cell: (enabled: boolean, highlight: boolean) => css`
     box-sizing: border-box;
     position: relative;
     overflow: hidden;
-    width: 155px;
-    height: 147px;
-    background-color: ${enabled ? '#FFF' : '#EEE'};
-    border: 1px solid #e9e9e9;
+    width: 100%;
+    height: 100%;
+    max-width: 180px;
+    max-height: 145px;
+    background-color: ${highlight ? '#eef7ff' : enabled ? '#FFF' : '#EEE'};
+    border: 1px solid ${highlight ? '#0084ff' : '#e9e9e9'};
   `,
   day: css`
     font-size: 18px;
-    margin: 3px 0 0 10px;
+    margin: 1px 0 2px 10px;
   `,
   post: (color: string, backgroundColor: string) => css`
-    width: 130px;
+    width: 100%;
     height: 23px;
     border-radius: 22px;
     background-color: ${backgroundColor};
@@ -41,27 +46,34 @@ const style = {
     }
   `,
   postsContainer: css`
-    height: 115px;
-    width: 130px;
-    position: absolute;
+    position: relative;
+    height: 110px;
+    width: 80%;
     left: 50%;
     bottom: 0;
     transform: translate(-50%, 0);
   `,
 };
 
-export default function CalendarCell({ day, posts, enabled }: CalendarCellProps) {
+export default function CalendarCell({
+  day,
+  posts,
+  enabled,
+  highlight = false,
+}: CalendarCellProps) {
+  const globalFilter = useRecoilValue(globalPostFilter);
   return enabled ? (
-    <div css={style.cell(enabled)}>
+    <div css={style.cell(enabled, highlight)}>
       <p css={style.day}>{day}</p>
       <div css={style.postsContainer}>
         {posts.map((post) => {
-          return <CellPost post={post} />;
+          if (globalFilter[post.type]) return <CellPost post={post} />;
+          return <></>;
         })}
       </div>
     </div>
   ) : (
-    <div css={style.cell(enabled)} />
+    <div css={style.cell(enabled, false)} />
   );
 }
 
