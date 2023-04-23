@@ -16,8 +16,10 @@ interface PostItemProps {
 
 const style = {
   container: css`
-    width: 500px;
-    height: 800px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
     border: solid 1px #bbbbbb;
     border-radius: 30px 30px 0 0;
   `,
@@ -38,8 +40,8 @@ const style = {
     }
   `,
   list: css`
-    height: 740px;
-    overflow: hidden scroll;
+    height: auto;
+    overflow-y: auto;
     display: flex;
     flex-direction: column;
     align-items: center;
