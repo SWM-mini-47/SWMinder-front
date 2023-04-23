@@ -1,11 +1,7 @@
 import { css } from '@emotion/react';
 import CalendarCell from '../CalendarCell';
-
-interface CalendarProps {
-  date: Date;
-  posts: Post[][];
-  cellClickCallback: (day: number) => void;
-}
+import { monthlyPosts, selectedDate } from '@/states/dateContext';
+import { useRecoilState, useRecoilValueLoadable } from 'recoil';
 
 const style = css`
   border: 0;
@@ -18,9 +14,11 @@ const style = css`
   }
 `;
 
-export default function Calendar({ date, posts, cellClickCallback }: CalendarProps) {
+export default function Calendar() {
+  const [date, setDate] = useRecoilState(selectedDate);
+  const posts = useRecoilValueLoadable(monthlyPosts);
   const startOffset = new Date(date.getFullYear(), date.getMonth() + 1, 1).getDay();
-  const daysInMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate() + 1;
+  const daysInMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
 
   return (
     <table css={style}>
@@ -42,10 +40,15 @@ export default function Calendar({ date, posts, cellClickCallback }: CalendarPro
                     <td
                       key={`calendarCell${d}`}
                       onClick={() => {
-                        cellClickCallback(d - 1);
+                        setDate(new Date(date.getFullYear(), date.getMonth(), d));
                       }}
                     >
-                      <CalendarCell day={d} posts={posts[d - 1]} enabled={true} />
+                      <CalendarCell
+                        day={d}
+                        highlight={d === date.getDate()}
+                        posts={posts.state === 'hasValue' ? posts.getValue()[d - 1] : []}
+                        enabled={true}
+                      />
                     </td>
                   );
               })}
