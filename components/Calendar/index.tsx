@@ -1,21 +1,27 @@
 import { css } from '@emotion/react';
 import CalendarCell from '../CalendarCell';
-import { monthlyPosts, selectedDate } from '@/states/dateContext';
+import { monthlyPosts, globalDate } from '@/states/dateContext';
 import { useRecoilState, useRecoilValueLoadable } from 'recoil';
 
 const style = css`
+  width: 100%;
   border: 0;
   border-spacing: 0;
   border-collapse: separate;
+  height: 100%;
+  max-width: 1260px;
+  max-height: 870px;
 
   td {
+    height: 16%;
+    max-height: 145px;
     padding: 0;
     margin: 0;
   }
 `;
 
 export default function Calendar() {
-  const [date, setDate] = useRecoilState(selectedDate);
+  const [date, setDate] = useRecoilState(globalDate);
   const posts = useRecoilValueLoadable(monthlyPosts);
   const startOffset = new Date(date.getFullYear(), date.getMonth() + 1, 1).getDay();
   const daysInMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
