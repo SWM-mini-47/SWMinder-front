@@ -1,6 +1,22 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
-  reactStrictMode: true,
-}
 
-module.exports = nextConfig
+const withPWA = require('next-pwa')({
+  dest: 'public',
+  disable: process.env.NODE_ENV === 'development',
+});
+
+module.exports = withPWA({
+  reactStrictMode: true,
+  basePath: process.env.NODE_ENV === 'production' ? '/SWMinder-front' : '',
+  images: {
+    unoptimized: process.env.NODE_ENV === 'production',
+  },
+  webpack: (config) => {
+    config.module.rules.push({
+      test: /\.svg$/,
+      use: ['@svgr/webpack'],
+    });
+    return config;
+  },
+  output: 'standalone',
+});
