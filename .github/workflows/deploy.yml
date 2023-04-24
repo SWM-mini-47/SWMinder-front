@@ -21,4 +21,5 @@ jobs:
             cd ~/SWMinder-front
             git checkout -- .
             git pull
+            yarn install
             yarn deploy
