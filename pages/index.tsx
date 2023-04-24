@@ -18,6 +18,7 @@ const style = {
       transform: translate(-50% ${show ? '' : ',-50px'});
       margin-left: 0;
     }
+    overscroll-behavior: none;
     left: 0;
     margin-left: 25px;
     max-width: 600px;
@@ -99,6 +100,7 @@ const style = {
   `,
 
   calendarTable: css`
+    overscroll-behavior: none;
     @media only screen and (max-width: 1300px) {
       overflow-y: visible;
     }
