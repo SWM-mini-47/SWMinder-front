@@ -3,6 +3,10 @@ import CalendarCell from '../CalendarCell';
 import { monthlyPosts, globalDate } from '@/states/dateContext';
 import { useRecoilState, useRecoilValueLoadable } from 'recoil';
 
+interface CalendarProps {
+  onClickCell: () => void;
+}
+
 const style = css`
   width: 100%;
   border: 0;
@@ -21,7 +25,7 @@ const style = css`
   }
 `;
 
-export default function Calendar() {
+export default function Calendar({ onClickCell }: CalendarProps) {
   const [date, setDate] = useRecoilState(globalDate);
   const posts = useRecoilValueLoadable(monthlyPosts);
   const startOffset = new Date(date.getFullYear(), date.getMonth() + 1, 1).getDay();
@@ -48,6 +52,7 @@ export default function Calendar() {
                       key={`calendarCell${d}`}
                       onClick={() => {
                         setDate(new Date(date.getFullYear(), date.getMonth(), d));
+                        onClickCell();
                       }}
                     >
                       <CalendarCell

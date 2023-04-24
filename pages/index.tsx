@@ -109,7 +109,7 @@ const style = {
 export default function Home() {
   const [date, setDate] = useRecoilState(globalDate);
   const [postView, setPostView] = useState<Post | null>(null);
-  const [showSideBar, setShowSideBar] = useState<boolean>(true);
+  const [showSideBar, setShowSideBar] = useState<boolean>(false);
   const [globalFilter, setGlobalFilter] = useRecoilState(globalPostFilter);
   const user = useRecoilValue(currentUser);
   const router = useRouter();
@@ -149,7 +149,7 @@ export default function Home() {
             </div>
           </div>
           <div css={style.calendarTable}>
-            <Calendar />
+            <Calendar onClickCell={() => setShowSideBar(true)} />
           </div>
         </div>
 
