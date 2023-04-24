@@ -12,7 +12,7 @@ export default function App({ Component, pageProps }: AppProps) {
           name="viewport"
           content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover"
         />
-        <link rel="manifest" href="/manifest.json" />
+        <link rel="manifest" href="/SWMinder-front/manifest.json" />
       </Head>
       <RecoilRoot>
         <Component {...pageProps} />
