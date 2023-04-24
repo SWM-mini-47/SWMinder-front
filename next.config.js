@@ -7,6 +7,10 @@ const withPWA = require('next-pwa')({
 
 module.exports = withPWA({
   reactStrictMode: true,
+  basePath: process.env.NODE_ENV === 'production' ? '/SWMinder-front' : '',
+  images: {
+    unoptimized: process.env.NODE_ENV === 'production',
+  },
   webpack: (config) => {
     config.module.rules.push({
       test: /\.svg$/,
