@@ -1,6 +1,6 @@
 type PostType = 'mentoring' | 'meetup' | 'board';
 interface Post {
-  id: string;
+  id: number;
   title: string;
   type: PostType;
   currentCount: number;
@@ -24,3 +24,12 @@ interface User {
 
 // 민감한 정보는 따로 관리
 interface UserCredentials {}
+
+interface Comment {
+  id: number;
+  author: string;
+  content: string;
+  created: Date;
+  like: boolean;
+  likeCount: number;
+}
