@@ -1,5 +1,6 @@
 type PostType = 'mentoring' | 'meetup' | 'board';
 interface Post {
+  id: string;
   title: string;
   type: PostType;
   currentCount: number;

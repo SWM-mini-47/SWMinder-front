@@ -67,7 +67,7 @@ export default function CalendarCell({
       <p css={style.day}>{day}</p>
       <div css={style.postsContainer}>
         {posts.map((post) => {
-          if (globalFilter[post.type]) return <CellPost post={post} />;
+          if (globalFilter[post.type]) return <CellPost key={`post-${post.id}`} post={post} />;
           return <></>;
         })}
       </div>
