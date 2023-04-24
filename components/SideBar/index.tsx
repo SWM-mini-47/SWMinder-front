@@ -50,7 +50,7 @@ const style = {
     display: flex;
     flex-direction: column;
     align-items: center;
-
+    overscroll-behavior-block: contain;
     background-color: #ffffff;
   `,
   item: css`

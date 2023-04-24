@@ -34,6 +34,7 @@ const style = {
     max-width: 1050px;
     width: 100%;
     height: 100%;
+    overscroll-behavior-block: contain;
   `,
   calendarHead: css`
     display: flex;
@@ -118,7 +119,7 @@ export default function Home() {
   const router = useRouter();
 
   return (
-    <div>
+    <div css={style.root}>
       <div css={style.container}>
         <div css={style.leftInfo}>
           <UserInfo onClick={() => router.push(user.userid === -1 ? '/login' : '/profile')} />
