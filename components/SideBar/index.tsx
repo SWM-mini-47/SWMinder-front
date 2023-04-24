@@ -45,7 +45,6 @@ const style = {
     }
   `,
   list: css`
-    overscroll-behavior: none;
     height: auto;
     overflow-y: auto;
     display: flex;
