@@ -32,7 +32,7 @@ const style = {
   mainFeed: css`
     padding: 10px;
     overflow-y: auto;
-
+    overscroll-behavior: none;
     max-width: 1050px;
     width: 100%;
     height: 100%;
