@@ -14,12 +14,16 @@ const style = {
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: #0000000a;
+    background-color: #00000021;
   `,
   container: css`
     position: relative;
     padding: 30px 20px 30px 20px;
     left: 50%;
+    @media only screen and (max-width: 900px) {
+      transform: none;
+      left: 0;
+    }
     transform: translateX(-50%);
     min-width: 900px;
     width: 70%;
@@ -65,7 +69,7 @@ const style = {
 export default function PostDetail({ post, closeCallback }: PostDetailProps) {
   return (
     <>
-      <div css={style.dim} />
+      <div css={style.dim} onClick={closeCallback} />
       <div css={style.container}>
         <button css={style.closeButton} onClick={closeCallback}>
           X
