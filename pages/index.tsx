@@ -13,19 +13,14 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 
 const style = {
   sidebar: (show: boolean) => css`
-    @media only screen and (max-width: 600px) {
-      width: 100%;
-      min-width: 300px;
-      margin-left: 0;
-    }
-
     @media only screen and (max-width: 1300px) {
-      left: auto;
+      left: 50%;
+      transform: translate(-50% ${show ? '' : ',-50px'});
+      margin-left: 0;
     }
     left: 0;
     margin-left: 25px;
     max-width: 600px;
-    min-width: 500px;
     width: 100%;
     height: 100%;
     position: absolute;
@@ -36,10 +31,10 @@ const style = {
   mainFeed: css`
     padding: 10px;
     overflow-y: auto;
-
     max-width: 1050px;
     width: 100%;
     height: 100%;
+    overscroll-behavior-block: contain;
   `,
   calendarHead: css`
     display: flex;
@@ -72,6 +67,9 @@ const style = {
   container: css`
     position: fixed;
     display: flex;
+    @media only screen and (max-width: 1300px) {
+      flex-direction: column;
+    }
     flex-direction: row;
     justify-content: space-evenly;
     width: 100%;
@@ -82,7 +80,7 @@ const style = {
   leftInfo: css`
     position: relative;
     @media only screen and (max-width: 1300px) {
-      display: none;
+      align-self: center;
     }
     padding: 20px 0 0 0;
     max-width: 650px;
@@ -101,20 +99,27 @@ const style = {
   `,
 
   calendarTable: css`
+    @media only screen and (max-width: 1300px) {
+      overflow-y: visible;
+    }
     overflow-x: auto;
+  `,
+
+  root: css`
+    overscroll-behavior: none;
   `,
 };
 
 export default function Home() {
   const [date, setDate] = useRecoilState(globalDate);
   const [postView, setPostView] = useState<Post | null>(null);
-  const [showSideBar, setShowSideBar] = useState<boolean>(true);
+  const [showSideBar, setShowSideBar] = useState<boolean>(false);
   const [globalFilter, setGlobalFilter] = useRecoilState(globalPostFilter);
   const user = useRecoilValue(currentUser);
   const router = useRouter();
 
   return (
-    <div>
+    <div css={style.root}>
       <div css={style.container}>
         <div css={style.leftInfo}>
           <UserInfo onClick={() => router.push(user.userid === -1 ? '/login' : '/profile')} />
@@ -148,7 +153,7 @@ export default function Home() {
             </div>
           </div>
           <div css={style.calendarTable}>
-            <Calendar />
+            <Calendar onClickCell={() => setShowSideBar(true)} />
           </div>
         </div>
 
