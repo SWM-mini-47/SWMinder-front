@@ -10,6 +10,7 @@ const style = css`
   border-collapse: separate;
   height: 100%;
   max-width: 1260px;
+  min-width: 800px;
   max-height: 870px;
 
   td {

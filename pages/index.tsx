@@ -2,11 +2,14 @@ import Calendar from '@/components/Calendar';
 import PostDetail from '@/components/PostDetail';
 import SideBar from '@/components/SideBar';
 import ToggleButton from '@/components/ToggleButton';
+import UserInfo from '@/components/UserInfo';
 import { globalDate, globalPostFilter } from '@/states/dateContext';
+import { currentUser } from '@/states/userContext';
 import { GLOBAL_COLOR } from '@/utils/color';
 import { css } from '@emotion/react';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 const style = {
   sidebar: (show: boolean) => css`
@@ -20,18 +23,20 @@ const style = {
       left: auto;
     }
     left: 0;
-
     margin-left: 25px;
     max-width: 600px;
     min-width: 500px;
     width: 100%;
     height: 100%;
     position: absolute;
-    top: ${show ? '0' : '95%'};
+    top: ${show ? '0' : '100%'};
+    transform: ${show ? 'none' : 'translateY(-50px)'};
+    opacity: ${show ? '100%' : '70%'};
   `,
   mainFeed: css`
     padding: 10px;
     overflow-y: auto;
+
     max-width: 1050px;
     width: 100%;
     height: 100%;
@@ -41,6 +46,9 @@ const style = {
     flex-direction: column;
   `,
   month: css`
+    @media only screen and (max-width: 1300px) {
+      align-self: center;
+    }
     align-self: flex-end;
     display: flex;
     align-items: center;
@@ -76,18 +84,24 @@ const style = {
     @media only screen and (max-width: 1300px) {
       display: none;
     }
+    padding: 20px 0 0 0;
     max-width: 650px;
     width: 100%;
   `,
 
-  line: css`
+  line: (vertical: boolean) => css`
     @media only screen and (max-width: 1300px) {
-      display: none;
+      display: ${vertical ? 'none' : 'block'};
     }
-    background-color: #f5f5f5;
-    width: 1px;
-    height: 100%;
-    margin: 20px 0 20px 0;
+    box-sizing: border-box;
+    background-color: #e9e9e9;
+    ${vertical ? 'width' : 'height'}: 1px;
+    ${vertical ? 'height' : 'width'}: auto;
+    margin: ${vertical ? '20px 0 20px 0' : '0 0 0 20px'};
+  `,
+
+  calendarTable: css`
+    overflow-x: auto;
   `,
 };
 
@@ -96,12 +110,17 @@ export default function Home() {
   const [postView, setPostView] = useState<Post | null>(null);
   const [showSideBar, setShowSideBar] = useState<boolean>(true);
   const [globalFilter, setGlobalFilter] = useRecoilState(globalPostFilter);
+  const user = useRecoilValue(currentUser);
+  const router = useRouter();
 
   return (
     <div>
       <div css={style.container}>
-        <div css={style.leftInfo}>TODO: 프로필 및 부가정보</div>
-        <div css={style.line} />
+        <div css={style.leftInfo}>
+          <UserInfo onClick={() => router.push(user.userid === -1 ? '/login' : '/profile')} />
+          <div css={style.line(false)} />
+        </div>
+        <div css={style.line(true)} />
         <div css={style.mainFeed}>
           <div css={style.calendarHead}>
             <div css={style.month}>
@@ -128,7 +147,9 @@ export default function Home() {
               />
             </div>
           </div>
-          <Calendar />
+          <div css={style.calendarTable}>
+            <Calendar />
+          </div>
         </div>
 
         <div css={style.sidebar(showSideBar)}>

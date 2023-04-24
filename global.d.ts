@@ -15,3 +15,11 @@ interface PostFilter {
   meetup: boolean;
   board: boolean;
 }
+interface User {
+  userid: number;
+  username: string;
+  profileImage: string;
+}
+
+// 민감한 정보는 따로 관리
+interface UserCredentials {}

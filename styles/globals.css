@@ -12,3 +12,7 @@
 ::-webkit-scrollbar-thumb {
   background: #797979;
 }
+
+* {
+  transition: 0.3s;
+}
