@@ -2,19 +2,16 @@ import { css } from '@emotion/react';
 import Favorite from '@/assets/favorite.svg';
 import FavoriteFill from '@/assets/favorite_fill.svg';
 import { useEffect, useState } from 'react';
+import { formatDate } from '@/utils/api';
 
 interface UserCommentProps {
-  userName: string;
-  userType: string;
-  text: string;
+  comment: Comment;
   likeCallback: (like: boolean) => void;
-  like: boolean;
-  likeCount: number;
 }
 
 const style = {
   container: css`
-    width: 800px;
+    width: 100%;
     position: relative;
     display: flex;
     align-items: stretch;
@@ -26,12 +23,12 @@ const style = {
   userName: css`
     width: 180px;
     margin: 0;
-    font-size: 30px;
+    font-size: 20px;
     font-weight: bold;
   `,
   userType: css`
     width: 180px;
-    margin: 10px 0 0 0;
+    margin: 1px 0 0 0;
     color: #333;
     font-size: 14px;
   `,
@@ -62,27 +59,20 @@ const style = {
   `,
 };
 
-export default function UserComment({
-  userName,
-  userType,
-  text,
-  likeCallback,
-  like,
-  likeCount,
-}: UserCommentProps) {
-  const [heart, setHeart] = useState<boolean>(like);
+export default function UserComment({ comment, likeCallback }: UserCommentProps) {
+  const [heart, setHeart] = useState<boolean>(comment.like);
   useEffect(() => {
     likeCallback(heart);
   }, [heart]);
   return (
     <div css={style.container}>
       <div css={style.userContainer}>
-        <p css={style.userName}>{userName}</p>
-        <p css={style.userType}>{userType}</p>
+        <p css={style.userName}>{comment.author}</p>
+        <p css={style.userType}>{formatDate(comment.created)}</p>
       </div>
       <div css={style.line} />
       <div css={style.commentContainer}>
-        <p>{text}</p>
+        <p>{comment.content}</p>
       </div>
       <div
         css={style.likeContainer}
@@ -91,7 +81,7 @@ export default function UserComment({
         }}
       >
         {heart ? <FavoriteFill /> : <Favorite />}
-        <p>{likeCount}</p>
+        <p>{comment.likeCount}</p>
       </div>
     </div>
   );

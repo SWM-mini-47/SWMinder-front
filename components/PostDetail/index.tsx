@@ -1,6 +1,8 @@
-import { formatDate } from '@/utils/api';
+import { formatDate, getCommentsByPostId } from '@/utils/api';
 import { css } from '@emotion/react';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import UserComment from '../UserComment';
 
 interface PostDetailProps {
   post: Post;
@@ -67,6 +69,15 @@ const style = {
 };
 
 export default function PostDetail({ post, closeCallback }: PostDetailProps) {
+  const [comments, setComments] = useState<Comment[]>([]);
+
+  useEffect(() => {
+    setComments([]);
+    (async () => {
+      setComments(await getCommentsByPostId(post.id));
+    })();
+  }, [post.id]);
+
   return (
     <>
       <div css={style.dim} onClick={closeCallback} />
@@ -94,8 +105,16 @@ export default function PostDetail({ post, closeCallback }: PostDetailProps) {
         <div css={style.breaker} />
         <Link href={post.url}>접수하러 가기</Link>
         <div>
-          {/* todo: comments */}
           <h3>댓글</h3>
+          {comments.map((e) => {
+            return (
+              <UserComment
+                key={`comment${e.id}`}
+                comment={e}
+                likeCallback={(like: boolean) => {}}
+              />
+            );
+          })}
         </div>
       </div>
     </>
