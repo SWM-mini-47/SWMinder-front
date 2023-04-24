@@ -13,19 +13,14 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 
 const style = {
   sidebar: (show: boolean) => css`
-    @media only screen and (max-width: 600px) {
-      width: 100%;
-      min-width: 300px;
-      margin-left: 0;
-    }
-
     @media only screen and (max-width: 1300px) {
-      left: auto;
+      left: 50%;
+      transform: translate(-50% ${show ? '' : ',-50px'});
+      margin-left: 0;
     }
     left: 0;
     margin-left: 25px;
     max-width: 600px;
-    min-width: 500px;
     width: 100%;
     height: 100%;
     position: absolute;
@@ -72,6 +67,9 @@ const style = {
   container: css`
     position: fixed;
     display: flex;
+    @media only screen and (max-width: 1300px) {
+      flex-direction: column;
+    }
     flex-direction: row;
     justify-content: space-evenly;
     width: 100%;
@@ -82,7 +80,7 @@ const style = {
   leftInfo: css`
     position: relative;
     @media only screen and (max-width: 1300px) {
-      display: none;
+      align-self: center;
     }
     padding: 20px 0 0 0;
     max-width: 650px;
@@ -101,6 +99,9 @@ const style = {
   `,
 
   calendarTable: css`
+    @media only screen and (max-width: 1300px) {
+      overflow-y: visible;
+    }
     overflow-x: auto;
   `,
 };

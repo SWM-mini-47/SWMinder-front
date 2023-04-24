@@ -17,11 +17,11 @@ const style = css`
   svg,
   img {
     border-radius: 50%;
-    width: 100px;
-    height: 100px;
+    width: 50px;
+    height: 50px;
   }
   p {
-    margin-left: 15px;
+    margin: 10px;
     font-size: 25px;
     font-weight: bold;
   }
