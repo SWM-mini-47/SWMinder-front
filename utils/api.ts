@@ -35,6 +35,19 @@ export async function getPostsByDate(date: Date) {
   });
 }
 
+export async function getCommentsByPostId(postid: number) {
+  // return (await axiosInstance.get(`/posts/by-id/${postid}/comments`)).data;
+
+  return new Array(5).fill({
+    id: 1,
+    author: '홍길동',
+    content: 'lorem ipsum',
+    created: new Date(),
+    like: false,
+    likeCount: 20,
+  });
+}
+
 export async function getPostsByMonth(date: Date) {
   // return (
   //   await axiosInstance.get(`/posts/${date.getFullYear()}/${date.getMonth() + 1}`)
