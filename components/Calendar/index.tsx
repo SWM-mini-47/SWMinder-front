@@ -28,7 +28,7 @@ const style = css`
 export default function Calendar({ onClickCell }: CalendarProps) {
   const [date, setDate] = useRecoilState(globalDate);
   const posts = useRecoilValueLoadable(monthlyPosts);
-  const startOffset = new Date(date.getFullYear(), date.getMonth() + 1, 1).getDay();
+  const startOffset = new Date(date.getFullYear(), date.getMonth(), 1).getDay();
   const daysInMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
 
   return (

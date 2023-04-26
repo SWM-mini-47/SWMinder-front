@@ -131,6 +131,7 @@ export default function SideBar({ postCallback, handleCallback }: SideBarProps) 
 
   useEffect(() => {
     (async () => {
+      // 멘토링 게시물만 읽어옴
       setPosts(await getPostsByDate(date));
     })();
   }, [date]);
@@ -164,6 +165,7 @@ export default function SideBar({ postCallback, handleCallback }: SideBarProps) 
   );
 }
 
+//
 function PostItem({ post, onClick }: PostItemProps) {
   return (
     <div
