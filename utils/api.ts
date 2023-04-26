@@ -8,6 +8,7 @@ export const axiosInstance = axios.create({
   baseURL: BASE_URL,
 });
 
+// 로그인
 export async function login(username: string, password: string) {
   return await axiosInstance.post('/login', { username: username, password: password });
 }
@@ -18,23 +19,28 @@ export function formatDate(date: Date) {
   }`;
 }
 
+// 게시글 눌렀을 때 세부정보
+// 제목 분류 게시자 게시일자 예정일자 모집현황
+// type은 mentoring | meetup | board 3개 있음
 export async function getPostsByDate(date: Date) {
   // return (
   //   await axiosInstance.get(`/posts/${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`)
   // ).data;
 
   return new Array(30).fill({
-    title: 'asdf',
-    type: 'mentoring',
+    title: '제목',
+    type: 'meetup',
     currentCount: 1,
     totalCount: 2,
     created: date,
     scheduled: new Date(2023, 3, 26),
-    author: 'asdf',
+    author: '홍길동 멘토',
     url: 'https://google.com/',
   });
 }
 
+// 게시글 밑의 댓글
+// 포스트팅된 글의 번호, 작성자, 댓글내용, 작성날짜, 좋아요 수, 내가 좋아요 버튼을 눌렀는지 여부
 export async function getCommentsByPostId(postid: number) {
   // return (await axiosInstance.get(`/posts/by-id/${postid}/comments`)).data;
 
@@ -48,6 +54,7 @@ export async function getCommentsByPostId(postid: number) {
   });
 }
 
+// CalendarCell 내에서 보이는 정보
 export async function getPostsByMonth(date: Date) {
   // return (
   //   await axiosInstance.get(`/posts/${date.getFullYear()}/${date.getMonth() + 1}`)
@@ -57,7 +64,7 @@ export async function getPostsByMonth(date: Date) {
 
   return new Array(daysInMonth).fill([
     {
-      title: 'asdf',
+      title: '멘토링1',
       type: 'mentoring',
       currentCount: 1,
       totalCount: 2,
@@ -67,7 +74,7 @@ export async function getPostsByMonth(date: Date) {
       url: 'https://google.com/',
     },
     {
-      title: 'asdf',
+      title: '모임1',
       type: 'meetup',
       currentCount: 1,
       totalCount: 2,
@@ -77,7 +84,7 @@ export async function getPostsByMonth(date: Date) {
       url: 'https://google.com/',
     },
     {
-      title: 'asdf',
+      title: '게시글1',
       type: 'board',
       currentCount: 1,
       totalCount: 2,
@@ -87,7 +94,7 @@ export async function getPostsByMonth(date: Date) {
       url: 'https://google.com/',
     },
     {
-      title: 'asdf',
+      title: '멘토링2',
       type: 'mentoring',
       currentCount: 1,
       totalCount: 2,
@@ -99,6 +106,7 @@ export async function getPostsByMonth(date: Date) {
   ]);
 }
 
+// D-day 이거 어떻게 해야됨?
 export function dday(date: Date) {
   const today = new Date();
   today.setHours(0);
