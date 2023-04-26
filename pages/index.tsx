@@ -146,9 +146,15 @@ export default function Home() {
               />
               <ToggleButton
                 text="모임"
-                value={globalFilter.meetup}
                 color={GLOBAL_COLOR.purple}
+                value={globalFilter.meetup}
                 onToggle={(flag) => setGlobalFilter({ ...globalFilter, meetup: flag })}
+              />
+              <ToggleButton
+                text="게시글"
+                color={GLOBAL_COLOR.gray}
+                value={globalFilter.meetup}
+                onToggle={(flag) => setGlobalFilter({ ...globalFilter, board: flag })}
               />
             </div>
           </div>
