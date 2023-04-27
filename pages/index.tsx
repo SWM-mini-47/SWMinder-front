@@ -8,7 +8,7 @@ import { currentUser } from '@/states/userContext';
 import { GLOBAL_COLOR } from '@/utils/color';
 import { css } from '@emotion/react';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
 const style = {
@@ -111,12 +111,17 @@ const style = {
 };
 
 export default function Home() {
-  const [date, setDate] = useRecoilState(globalDate);
   const [postView, setPostView] = useState<Post | null>(null);
   const [showSideBar, setShowSideBar] = useState<boolean>(false);
   const [globalFilter, setGlobalFilter] = useRecoilState(globalPostFilter);
+  const [date, setDate] = useRecoilState(globalDate);
   const user = useRecoilValue(currentUser);
   const router = useRouter();
+
+  if (user.userid === -1) {
+    if (router.isReady) router.push('/login');
+    return <>Login required</>;
+  }
 
   return (
     <div css={style.root}>
@@ -141,25 +146,30 @@ export default function Home() {
               <ToggleButton
                 text="특강"
                 color={GLOBAL_COLOR.blue}
-                value={globalFilter.mentoring}
-                onToggle={(flag) => setGlobalFilter({ ...globalFilter, mentoring: flag })}
+                value={globalFilter.MENTORING}
+                onToggle={(flag) => setGlobalFilter({ ...globalFilter, MENTORING: flag })}
               />
               <ToggleButton
                 text="모임"
                 color={GLOBAL_COLOR.purple}
-                value={globalFilter.meetup}
-                onToggle={(flag) => setGlobalFilter({ ...globalFilter, meetup: flag })}
+                value={globalFilter.MEETUP}
+                onToggle={(flag) => setGlobalFilter({ ...globalFilter, MEETUP: flag })}
               />
               <ToggleButton
                 text="게시글"
                 color={GLOBAL_COLOR.gray}
-                value={globalFilter.meetup}
-                onToggle={(flag) => setGlobalFilter({ ...globalFilter, board: flag })}
+                value={globalFilter.BOARD}
+                onToggle={(flag) => setGlobalFilter({ ...globalFilter, BOARD: flag })}
               />
             </div>
           </div>
           <div css={style.calendarTable}>
-            <Calendar onClickCell={() => setShowSideBar(true)} />
+            <Calendar
+              onClickCell={(d: number) => {
+                setShowSideBar(true);
+                setDate(new Date(date.getFullYear(), date.getMonth(), d));
+              }}
+            />
           </div>
         </div>
 
