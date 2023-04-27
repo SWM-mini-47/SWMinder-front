@@ -89,9 +89,14 @@ export default function SignUpPage() {
       </button>
       <button
         onClick={async () => {
-          if ((await signUp(userName, loginId, password, contact, email, skills)).status === 200) {
-            login(userName, password);
-            router.push('/');
+          try {
+            if (
+              (await signUp(userName, loginId, password, contact, email, skills)).status === 200
+            ) {
+              router.push('/login');
+            }
+          } catch (e) {
+            alert('회원가입 실패!');
           }
         }}
       >

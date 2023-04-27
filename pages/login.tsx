@@ -2,7 +2,7 @@ import { currentUser } from '@/states/userContext';
 import { login } from '@/utils/api';
 import { css } from '@emotion/react';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import React, { KeyboardEvent, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
 const style = css`
@@ -34,12 +34,31 @@ export default function LoginPage() {
   const [password, setPassword] = useState<string>('');
   const router = useRouter();
 
+  const handler = async () => {
+    //TODO: handle exception
+    try {
+      if ((await login(userName, password)).status === 200) {
+        setUser({ ...user, userid: 0, username: userName });
+        router.push('/');
+      }
+    } catch (e) {
+      alert('로그인 실패!');
+    }
+  };
+
+  const keyHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handler();
+    }
+  };
+
   return (
     <div css={style}>
       <h2>소마인더 로그인</h2>
       <input
         type="text"
         placeholder="아이디"
+        onKeyDown={keyHandler}
         onChange={(e) => {
           setUserName(e.target.value);
         }}
@@ -50,18 +69,9 @@ export default function LoginPage() {
         onChange={(e) => {
           setPassword(e.target.value);
         }}
+        onKeyDown={keyHandler}
       />
-      <button
-        onClick={async () => {
-          //TODO: handle exception
-          if ((await login(userName, password)).status === 200) {
-            setUser({ ...user, userid: 0, username: userName });
-            router.push('/');
-          }
-        }}
-      >
-        로그인
-      </button>
+      <button onClick={handler}>로그인</button>
       <button
         onClick={async () => {
           router.push('/signup');
