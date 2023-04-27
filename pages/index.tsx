@@ -10,7 +10,6 @@ import { css } from '@emotion/react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import Profile from '@/components/Profile/ProfileIndex';
 
 const style = {
   sidebar: (show: boolean) => css`
@@ -109,16 +108,6 @@ const style = {
   root: css`
     overscroll-behavior: none;
   `,
-  p: css`
-    background-color: #a7f6ff;
-    display: inline-block;
-    margin-left: 15px;
-    margin-top: 0;
-    border-radius: 5px;
-    padding: 5px 10px 5px 10px;
-    cursor: pointer;
-    color: darkblue;
-  `,
 };
 
 export default function Home() {
@@ -184,17 +173,24 @@ export default function Home() {
           </div>
         </div>
 
-        {postView === null ? (
-          <></>
-        ) : (
-          <PostDetail
-            post={postView}
-            closeCallback={() => {
-              setPostView(null);
-            }}
+        <div css={style.sidebar(showSideBar)}>
+          <SideBar
+            handleCallback={() => setShowSideBar(!showSideBar)}
+            postCallback={(post: Post) => setPostView(post)}
           />
-        )}
+        </div>
       </div>
+
+      {postView === null ? (
+        <></>
+      ) : (
+        <PostDetail
+          post={postView}
+          closeCallback={() => {
+            setPostView(null);
+          }}
+        />
+      )}
     </div>
   );
 }
