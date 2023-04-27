@@ -9,7 +9,6 @@ import {
   faUser,
 } from '@fortawesome/free-solid-svg-icons';
 import ProfileDetail from './profiledetail';
-import { profile } from 'console';
 import ProfileImage from './profileImage';
 import React, { useEffect, useState, useRef } from 'react';
 import Description from './description';
@@ -51,8 +50,8 @@ export default function Profile({
     setIsClicked(!isClicked);
   };
   const buttonStyle = {
-    backgroundColor: isClicked ? 'grey' : 'lightgrey',
-    color: isClicked ? 'white' : 'black',
+    backgroundColor: !isClicked ? 'grey' : 'lightgrey',
+    color: !isClicked ? 'white' : 'black',
 
     border: 'none',
     padding: '8px 16px',
@@ -95,7 +94,7 @@ export default function Profile({
         <ProfileImage currentImage={profileImage} onImageChange={handleImageChange} />
 
         <button onClick={handleClick} className="editButton" style={buttonStyle}>
-          {isClicked ? '프로필 편집하기' : '저장'}
+          {!isClicked ? '프로필 편집하기' : '저장'}
         </button>
       </div>
       <div className="main">
