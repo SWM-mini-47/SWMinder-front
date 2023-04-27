@@ -41,7 +41,7 @@ function Skills({ isClicked, stack }: skillProps) {
     setUniqueItems(uniqueItems.filter((uniqueItem) => uniqueItem !== item));
   };
 
-  if (isClicked) {
+  if (!isClicked) {
     return (
       <div className="skills">
         <h2>skills</h2>

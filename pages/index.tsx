@@ -10,6 +10,7 @@ import { css } from '@emotion/react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
+import Profile from '@/components/Profile/ProfileIndex';
 
 const style = {
   sidebar: (show: boolean) => css`
@@ -108,6 +109,16 @@ const style = {
   root: css`
     overscroll-behavior: none;
   `,
+  p: css`
+    background-color: #a7f6ff;
+    display: inline-block;
+    margin-left: 15px;
+    margin-top: 0;
+    border-radius: 5px;
+    padding: 5px 10px 5px 10px;
+    cursor: pointer;
+    color: darkblue;
+  `,
 };
 
 export default function Home() {
@@ -117,70 +128,93 @@ export default function Home() {
   const [globalFilter, setGlobalFilter] = useRecoilState(globalPostFilter);
   const user = useRecoilValue(currentUser);
   const router = useRouter();
+  const [isMain, setIsMain] = useState<boolean>(true);
+  const SceneChange = (): void => {
+    setIsMain(!isMain);
+  };
+  if (isMain === true) {
+    return (
+      <div css={style.root}>
+        <div css={style.container}>
+          <div css={style.leftInfo}>
+            <p css={style.p} onClick={SceneChange}>
+              프로필 관리
+            </p>
+            <UserInfo onClick={() => router.push(user.userid === -1 ? '/login' : '/profile')} />
 
-  return (
-    <div css={style.root}>
-      <div css={style.container}>
-        <div css={style.leftInfo}>
-          <UserInfo onClick={() => router.push(user.userid === -1 ? '/login' : '/profile')} />
-          <div css={style.line(false)} />
-        </div>
-        <div css={style.line(true)} />
-        <div css={style.mainFeed}>
-          <div css={style.calendarHead}>
-            <div css={style.month}>
-              <button onClick={() => setDate(new Date(date.getFullYear(), date.getMonth() - 1, 1))}>
-                &lt;
-              </button>
-              <h1>{`${date.getMonth() + 1}월`}</h1>
-              <button onClick={() => setDate(new Date(date.getFullYear(), date.getMonth() + 1, 1))}>
-                &gt;
-              </button>
+            <div css={style.line(false)} />
+          </div>
+          <div css={style.line(true)} />
+          <div css={style.mainFeed}>
+            <div css={style.calendarHead}>
+              <div css={style.month}>
+                <button
+                  onClick={() => setDate(new Date(date.getFullYear(), date.getMonth() - 1, 1))}
+                >
+                  &lt;
+                </button>
+                <h1>{`${date.getMonth() + 1}월`}</h1>
+                <button
+                  onClick={() => setDate(new Date(date.getFullYear(), date.getMonth() + 1, 1))}
+                >
+                  &gt;
+                </button>
+              </div>
+              <div css={style.filters}>
+                <ToggleButton
+                  text="특강"
+                  color={GLOBAL_COLOR.blue}
+                  value={globalFilter.mentoring}
+                  onToggle={(flag) => setGlobalFilter({ ...globalFilter, mentoring: flag })}
+                />
+                <ToggleButton
+                  text="모임"
+                  color={GLOBAL_COLOR.purple}
+                  value={globalFilter.meetup}
+                  onToggle={(flag) => setGlobalFilter({ ...globalFilter, meetup: flag })}
+                />
+                <ToggleButton
+                  text="게시글"
+                  color={GLOBAL_COLOR.gray}
+                  value={globalFilter.meetup}
+                  onToggle={(flag) => setGlobalFilter({ ...globalFilter, board: flag })}
+                />
+              </div>
             </div>
-            <div css={style.filters}>
-              <ToggleButton
-                text="특강"
-                color={GLOBAL_COLOR.blue}
-                value={globalFilter.mentoring}
-                onToggle={(flag) => setGlobalFilter({ ...globalFilter, mentoring: flag })}
-              />
-              <ToggleButton
-                text="모임"
-                color={GLOBAL_COLOR.purple}
-                value={globalFilter.meetup}
-                onToggle={(flag) => setGlobalFilter({ ...globalFilter, meetup: flag })}
-              />
-              <ToggleButton
-                text="게시글"
-                color={GLOBAL_COLOR.gray}
-                value={globalFilter.meetup}
-                onToggle={(flag) => setGlobalFilter({ ...globalFilter, board: flag })}
-              />
+            <div css={style.calendarTable}>
+              <Calendar onClickCell={() => setShowSideBar(true)} />
             </div>
           </div>
-          <div css={style.calendarTable}>
-            <Calendar onClickCell={() => setShowSideBar(true)} />
+
+          <div css={style.sidebar(showSideBar)}>
+            <SideBar
+              handleCallback={() => setShowSideBar(!showSideBar)}
+              postCallback={(post: Post) => setPostView(post)}
+            />
           </div>
         </div>
 
-        <div css={style.sidebar(showSideBar)}>
-          <SideBar
-            handleCallback={() => setShowSideBar(!showSideBar)}
-            postCallback={(post: Post) => setPostView(post)}
+        {postView === null ? (
+          <></>
+        ) : (
+          <PostDetail
+            post={postView}
+            closeCallback={() => {
+              setPostView(null);
+            }}
           />
-        </div>
+        )}
       </div>
+    );
+  } else {
+    return (
+      <div>
+        <p css={style.p} onClick={SceneChange}>
+          캘린더
+        </p>
 
-      {postView === null ? (
-        <></>
-      ) : (
-        <PostDetail
-          post={postView}
-          closeCallback={() => {
-            setPostView(null);
-          }}
-        />
-      )}
-    </div>
-  );
+        <Profile />
+      </div>
+    );
+  }
 }

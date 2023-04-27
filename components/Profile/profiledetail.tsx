@@ -11,7 +11,7 @@ import {
 import exp from 'constants';
 
 function ProfileDetail({ isClicked, icon, title, content, handleInputChange }: ProfileDetailProps) {
-  if (!isClicked) {
+  if (isClicked) {
     return (
       <div className="profile_comp">
         <div>
