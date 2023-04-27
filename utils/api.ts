@@ -10,7 +10,26 @@ export const axiosInstance = axios.create({
 
 // 로그인
 export async function login(username: string, password: string) {
-  return await axiosInstance.post('/login', { username: username, password: password });
+  return await axiosInstance.get('/login', { auth: { username: username, password: password } });
+}
+
+// 회원가입
+export async function signUp(
+  username: string,
+  loginId: string,
+  password: string,
+  contact: string,
+  email: string,
+  skills: string[],
+) {
+  return await axiosInstance.post('/signUp', {
+    username: username,
+    loginId: loginId,
+    password: password,
+    contact: contact,
+    email: email,
+    skills: skills,
+  });
 }
 
 export function formatDate(date: Date) {
@@ -55,6 +74,7 @@ export async function getCommentsByPostId(postid: number) {
 }
 
 // CalendarCell 내에서 보이는 정보
+// 일별 상위 4개만 가져옴
 export async function getPostsByMonth(date: Date) {
   // return (
   //   await axiosInstance.get(`/posts/${date.getFullYear()}/${date.getMonth() + 1}`)
