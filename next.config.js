@@ -7,9 +7,12 @@ const withPWA = require('next-pwa')({
 
 module.exports = withPWA({
   reactStrictMode: true,
-  basePath: process.env.NODE_ENV === 'production' ? '/SWMinder-front' : '',
+  basePath: process.env.NODE_ENV === 'production' ? '/' : '',
   images: {
     unoptimized: process.env.NODE_ENV === 'production',
+  },
+  compiler: {
+    emotion: true,
   },
   webpack: (config) => {
     config.module.rules.push({
