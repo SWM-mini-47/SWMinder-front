@@ -103,11 +103,12 @@ export default function PostDetail({ post, closeCallback }: PostDetailProps) {
         <h3>모집 현황</h3>
         <span>{`${post.joinCount}/${post.limitCount}`}</span>
         <div css={style.breaker} />
-        <Link
+        <a
           href={`https://swmaestro.org/sw/mypage/mentoLec/view.do?qustnrSn=${post.qustnrSn}&menuNo=200046`}
+          target="_blank"
         >
           접수하러 가기
-        </Link>
+        </a>
         <div>
           <h3>댓글</h3>
           {comments.map((e) => {

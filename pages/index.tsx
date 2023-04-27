@@ -5,6 +5,7 @@ import ToggleButton from '@/components/ToggleButton';
 import UserInfo from '@/components/UserInfo';
 import { forceReload, globalDate, globalPostFilter } from '@/states/dateContext';
 import { currentUser } from '@/states/userContext';
+import { getMemberProfile } from '@/utils/api';
 import { GLOBAL_COLOR } from '@/utils/color';
 import { css } from '@emotion/react';
 import { useRouter } from 'next/router';
@@ -141,12 +142,22 @@ export default function Home() {
   const [showSideBar, setShowSideBar] = useState<boolean>(false);
   const [globalFilter, setGlobalFilter] = useRecoilState(globalPostFilter);
   const [date, setDate] = useRecoilState(globalDate);
-  const user = useRecoilValue(currentUser);
+  const [user, setUser] = useRecoilState(currentUser);
   const router = useRouter();
 
   if (user.memberId === -1) {
-    if (router.isReady) router.push('/login');
-    return <>Login required</>;
+    (async () => {
+      const newuser = await getMemberProfile();
+      console.log(newuser);
+      if (newuser.memberId === undefined && router.isReady) router.push('/login');
+      setUser({
+        ...newuser,
+        username: newuser.username === undefined ? 'Guest' : newuser.username,
+        birth: new Date(newuser.birth),
+        skills: newuser.skills === undefined ? [] : newuser.skills,
+      });
+    })();
+    return <></>;
   }
 
   return (
