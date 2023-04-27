@@ -172,4 +172,22 @@ input:focus {
 }
 .txt {
   text-align: center;
+/* width */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #fff;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #797979;
+}
+
+* {
+  transition: 0.3s;
+
 }
