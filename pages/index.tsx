@@ -118,7 +118,7 @@ export default function Home() {
   const user = useRecoilValue(currentUser);
   const router = useRouter();
 
-  if (user.userid === -1) {
+  if (user.memberId === -1) {
     if (router.isReady) router.push('/login');
     return <>Login required</>;
   }
@@ -127,7 +127,7 @@ export default function Home() {
     <div css={style.root}>
       <div css={style.container}>
         <div css={style.leftInfo}>
-          <UserInfo onClick={() => router.push(user.userid === -1 ? '/login' : '/profile')} />
+          <UserInfo onClick={() => router.push(user.memberId === -1 ? '/login' : '/profile')} />
           <div css={style.line(false)} />
         </div>
         <div css={style.line(true)} />

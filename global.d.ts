@@ -1,4 +1,5 @@
 type PostType = 'MENTORING' | 'MEETUP' | 'BOARD';
+
 interface Post {
   applyEndTime: Date;
   applyStartTime: Date;
@@ -25,16 +26,6 @@ interface PostFilter {
   MEETUP: boolean;
   BOARD: boolean;
 }
-interface User {
-  userid: number;
-  username: string;
-  profileImage: string;
-}
-
-// 민감한 정보는 따로 관리
-interface UserCredentials {}
-
-interface UserForm {}
 
 interface Comment {
   id: number;
@@ -43,4 +34,17 @@ interface Comment {
   created: Date;
   like: boolean;
   likeCount: number;
+}
+
+interface User {
+  memberId: number;
+  username: string;
+  loginId: string;
+  profileImage: string;
+  contact: string;
+  birth: Date;
+  email: string;
+  address: string;
+  education: string;
+  skills: string[];
 }
