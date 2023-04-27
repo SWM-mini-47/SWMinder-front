@@ -14,6 +14,25 @@ export async function login(username: string, password: string) {
   return await axiosInstance.get('/login', { auth: { username: username, password: password } });
 }
 
+// 회원가입
+export async function signUp(
+  username: string,
+  loginId: string,
+  password: string,
+  contact: string,
+  email: string,
+  skills: string[],
+) {
+  return await axiosInstance.post('/signUp', {
+    username: username,
+    loginId: loginId,
+    password: password,
+    contact: contact,
+    email: email,
+    skills: skills,
+  });
+}
+
 export function formatDate(date: Date) {
   return `${date.getFullYear()}.${date.getMonth() + 1}${
     date.getDate() === 0 ? '' : `.${date.getDate()}`

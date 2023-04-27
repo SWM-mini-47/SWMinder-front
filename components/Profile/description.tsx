@@ -5,7 +5,7 @@ interface desCriptionProps {
 }
 
 function Description({ handleInputChange, isClicked, des }: desCriptionProps) {
-  if (isClicked) {
+  if (!isClicked) {
     return (
       <div className="description">
         <h2>Description</h2>

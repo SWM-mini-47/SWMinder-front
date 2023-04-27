@@ -62,6 +62,13 @@ export default function LoginPage() {
       >
         로그인
       </button>
+      <button
+        onClick={async () => {
+          router.push('/signup');
+        }}
+      >
+        회원가입
+      </button>
     </div>
   );
 }
