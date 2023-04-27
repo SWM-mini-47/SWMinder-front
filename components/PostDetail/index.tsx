@@ -74,9 +74,9 @@ export default function PostDetail({ post, closeCallback }: PostDetailProps) {
   useEffect(() => {
     setComments([]);
     (async () => {
-      setComments(await getCommentsByPostId(post.id));
+      setComments(await getCommentsByPostId(post.qustnrSn));
     })();
-  }, [post.id]);
+  }, [post.qustnrSn]);
 
   return (
     <>
@@ -89,21 +89,25 @@ export default function PostDetail({ post, closeCallback }: PostDetailProps) {
         <span>{post.title}</span>
         <div css={style.breaker} />
         <h3>분류</h3>
-        <span>{post.type}</span>
+        <span>{post.category}</span>
         <div css={style.breaker} />
         <h3>게시자</h3>
         <span>{post.author}</span>
         <div css={style.breaker} />
         <h3>게시 일자</h3>
-        <span>{formatDate(post.created)}</span>
+        <span>{formatDate(post.createdDate)}</span>
         <div css={style.breaker} />
         <h3>예정 일자</h3>
-        <span>{formatDate(post.scheduled)}</span>
+        <span>{formatDate(post.startTime)}</span>
         <div css={style.breaker} />
         <h3>모집 현황</h3>
-        <span>{`${post.currentCount}/${post.totalCount}`}</span>
+        <span>{`${post.joinCount}/${post.limitCount}`}</span>
         <div css={style.breaker} />
-        <Link href={post.url}>접수하러 가기</Link>
+        <Link
+          href={`https://swmaestro.org/sw/mypage/mentoLec/view.do?qustnrSn=${post.qustnrSn}&menuNo=200046`}
+        >
+          접수하러 가기
+        </Link>
         <div>
           <h3>댓글</h3>
           {comments.map((e) => {

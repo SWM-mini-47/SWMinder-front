@@ -1,7 +1,9 @@
+import { currentUser } from '@/states/userContext';
 import { login } from '@/utils/api';
 import { css } from '@emotion/react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 const style = css`
   text-align: center;
@@ -27,6 +29,7 @@ const style = css`
 `;
 
 export default function LoginPage() {
+  const [user, setUser] = useRecoilState(currentUser);
   const [userName, setUserName] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const router = useRouter();
@@ -51,7 +54,10 @@ export default function LoginPage() {
       <button
         onClick={async () => {
           //TODO: handle exception
-          if ((await login(userName, password)).status === 200) router.push('/');
+          if ((await login(userName, password)).status === 200) {
+            setUser({ ...user, userid: 0, username: userName });
+            router.push('/');
+          }
         }}
       >
         로그인

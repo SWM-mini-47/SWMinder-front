@@ -6,6 +6,7 @@ if (!BASE_URL) throw new Error('Base url이 없습니다.');
 
 export const axiosInstance = axios.create({
   baseURL: BASE_URL,
+  withCredentials: true,
 });
 
 // 로그인
@@ -45,17 +46,7 @@ export async function getPostsByDate(date: Date) {
   // return (
   //   await axiosInstance.get(`/posts/${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`)
   // ).data;
-
-  return new Array(30).fill({
-    title: '제목',
-    type: 'meetup',
-    currentCount: 1,
-    totalCount: 2,
-    created: date,
-    scheduled: new Date(2023, 3, 26),
-    author: '홍길동 멘토',
-    url: 'https://google.com/',
-  });
+  return [];
 }
 
 // 게시글 밑의 댓글
@@ -74,56 +65,10 @@ export async function getCommentsByPostId(postid: number) {
 }
 
 // CalendarCell 내에서 보이는 정보
-// 일별 상위 4개만 가져옴
-export async function getPostsByMonth(date: Date) {
-  // return (
-  //   await axiosInstance.get(`/posts/${date.getFullYear()}/${date.getMonth() + 1}`)
-  // ).data;
-
-  const daysInMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
-
-  return new Array(daysInMonth).fill([
-    {
-      title: '멘토링1',
-      type: 'mentoring',
-      currentCount: 1,
-      totalCount: 2,
-      created: date,
-      scheduled: new Date(2023, 3, 26),
-      author: 'asdf',
-      url: 'https://google.com/',
-    },
-    {
-      title: '모임1',
-      type: 'meetup',
-      currentCount: 1,
-      totalCount: 2,
-      created: date,
-      scheduled: new Date(2023, 3, 26),
-      author: 'asdf',
-      url: 'https://google.com/',
-    },
-    {
-      title: '게시글1',
-      type: 'board',
-      currentCount: 1,
-      totalCount: 2,
-      created: date,
-      scheduled: new Date(2023, 3, 26),
-      author: 'asdf',
-      url: 'https://google.com/',
-    },
-    {
-      title: '멘토링2',
-      type: 'mentoring',
-      currentCount: 1,
-      totalCount: 2,
-      created: date,
-      scheduled: new Date(2023, 3, 26),
-      author: 'asdf',
-      url: 'https://google.com/',
-    },
-  ]);
+export async function getPostsByMonth(date: Date): Promise<PostsResponse> {
+  const res = await axiosInstance.get(`/posts/${date.getFullYear()}/${date.getMonth() + 1}`);
+  if (res.status !== 200) return { board: [], meetup: [], mentoring: [] };
+  else return res.data;
 }
 
 // D-day 이거 어떻게 해야됨?
@@ -131,5 +76,6 @@ export function dday(date: Date) {
   const today = new Date();
   today.setHours(0);
   const timeDiff = today.getTime() - date.getTime();
-  return `D${Math.ceil(timeDiff / (1000 * 3600 * 24)) - 1}`;
+  const diff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+  return `D${diff === 0 ? `-${diff}` : diff > 0 ? `+${diff}` : diff}`;
 }

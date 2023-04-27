@@ -4,7 +4,7 @@ import { monthlyPosts, globalDate } from '@/states/dateContext';
 import { useRecoilState, useRecoilValueLoadable } from 'recoil';
 
 interface CalendarProps {
-  onClickCell: () => void;
+  onClickCell: (d: number) => void;
 }
 
 const style = css`
@@ -48,17 +48,13 @@ export default function Calendar({ onClickCell }: CalendarProps) {
                   );
                 else
                   return (
-                    <td
-                      key={`calendarCell${d}`}
-                      onClick={() => {
-                        setDate(new Date(date.getFullYear(), date.getMonth(), d));
-                        onClickCell();
-                      }}
-                    >
+                    <td key={`calendarCell${d}`} onClick={() => onClickCell(d)}>
                       <CalendarCell
                         day={d}
                         highlight={d === date.getDate()}
-                        posts={posts.state === 'hasValue' ? posts.getValue()[d - 1] : []}
+                        posts={
+                          posts.state === 'hasValue' ? posts.getValue()[d - 1].slice(0, 4) : []
+                        }
                         enabled={true}
                       />
                     </td>

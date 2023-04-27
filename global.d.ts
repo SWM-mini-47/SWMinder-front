@@ -1,20 +1,29 @@
-type PostType = 'mentoring' | 'meetup' | 'board';
+type PostType = 'MENTORING' | 'MEETUP' | 'BOARD';
 interface Post {
-  id: number;
-  title: string;
-  type: PostType;
-  currentCount: number;
-  totalCount: number;
-  created: Date;
-  scheduled: Date;
+  applyEndTime: Date;
+  applyStartTime: Date;
   author: string;
-  url: string;
+  category: PostType;
+  createdDate: Date;
+  endTime: Date;
+  joinCount: number;
+  limitCount: number;
+  mentoringId: number;
+  qustnrSn: number;
+  startTime: Date;
+  title: string;
+}
+
+interface PostsResponse {
+  board: Post[];
+  meetup: Post[];
+  mentoring: Post[];
 }
 
 interface PostFilter {
-  mentoring: boolean;
-  meetup: boolean;
-  board: boolean;
+  MENTORING: boolean;
+  MEETUP: boolean;
+  BOARD: boolean;
 }
 interface User {
   userid: number;
@@ -24,6 +33,8 @@ interface User {
 
 // 민감한 정보는 따로 관리
 interface UserCredentials {}
+
+interface UserForm {}
 
 interface Comment {
   id: number;
