@@ -128,19 +128,6 @@ export default function Home() {
   const [date, setDate] = useRecoilState(globalDate);
   const user = useRecoilValue(currentUser);
   const router = useRouter();
-  const [isMain, setIsMain] = useState<boolean>(true);
-  const SceneChange = (): void => {
-    setIsMain(!isMain);
-  };
-  if (isMain === true) {
-    return (
-      <div css={style.root}>
-        <div css={style.container}>
-          <div css={style.leftInfo}>
-            <p css={style.p} onClick={SceneChange}>
-              프로필 관리
-            </p>
-            <UserInfo onClick={() => router.push(user.userid === -1 ? '/login' : '/profile')} />
 
   if (user.userid === -1) {
     if (router.isReady) router.push('/login');
@@ -208,16 +195,6 @@ export default function Home() {
           />
         )}
       </div>
-    );
-  } else {
-    return (
-      <div>
-        <p css={style.p} onClick={SceneChange}>
-          캘린더
-        </p>
-
-        <Profile />
-      </div>
-    );
-  }
+    </div>
+  );
 }
