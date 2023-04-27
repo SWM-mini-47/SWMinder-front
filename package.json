@@ -4,10 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build && next export -o docs/",
+    "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "deploy": "next build && next export -o docs/ && touch docs/.nojekyll && git add -f docs/ && git commit -m '🚀 deploy: gh pages' && git push"
+    "lint": "next lint"
   },
   "dependencies": {
     "@emotion/react": "^11.10.6",
@@ -31,7 +30,6 @@
     "typescript": "5.0.4"
   },
   "devDependencies": {
-    "@svgr/webpack": "^7.0.0",
-    "gh-pages": "^5.0.0"
+    "@svgr/webpack": "^7.0.0"
   }
 }
