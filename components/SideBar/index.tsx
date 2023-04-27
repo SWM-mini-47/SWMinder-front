@@ -142,7 +142,7 @@ export default function SideBar({ postCallback, handleCallback }: SideBarProps) 
         <p>{`${date.getMonth() + 1}월 ${date.getDate()}일`}</p>
         <button
           onClick={() => {
-            setDate(new Date(date.getFullYear(), date.getMonth(), date.getDate() - 1));
+            setDate(new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1));
           }}
         >
           &gt;
