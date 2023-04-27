@@ -191,3 +191,7 @@ input:focus {
 * {
   transition: 0.3s;
 }
+
+body {
+  font-family: 'NotoSansKR', sans-serif;
+}

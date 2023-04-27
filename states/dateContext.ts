@@ -21,9 +21,15 @@ export const globalMonth = selector({
   },
 });
 
+export const forceReload = atom<number>({
+  key: 'forceReload',
+  default: 0,
+});
+
 export const monthlyPosts = selector({
   key: 'posts',
   get: async ({ get }) => {
+    get(forceReload);
     const date = new Date(get(globalYear), get(globalMonth) + 1, 0);
     const daysInMonth = date.getDate();
     const posts = await getPostsByMonth(date);
