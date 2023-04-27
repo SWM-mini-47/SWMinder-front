@@ -22,8 +22,8 @@ const style = {
     flex-direction: column;
     width: 100%;
     height: 100%;
-    border: solid 1px #bbbbbb;
-    background-color: white;
+    border: solid 1px #cacaca;
+    background-color: #ffffff;
     border-radius: 30px 30px 0 0;
   `,
   dateContainer: css`
@@ -58,7 +58,7 @@ const style = {
     padding: 10px;
     justify-content: space-around;
     align-items: center;
-    background-color: #e9e9e9;
+    background-color: #f8f8f8;
     border-radius: 20px;
     margin-top: 8px;
   `,
