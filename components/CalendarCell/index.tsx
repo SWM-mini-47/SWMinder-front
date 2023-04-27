@@ -19,10 +19,8 @@ const style = {
     box-sizing: border-box;
     position: relative;
     overflow: hidden;
-    width: 100%;
-    height: 100%;
-    max-width: 180px;
-    max-height: 145px;
+    width: 150px;
+    height: 145px;
     background-color: ${highlight ? '#eef7ff' : enabled ? '#FFF' : '#EEE'};
     border: 1px solid ${highlight ? '#0084ff' : '#e9e9e9'};
   `,
@@ -32,16 +30,19 @@ const style = {
   `,
   post: (color: string, backgroundColor: string) => css`
     width: 100%;
-    height: 23px;
+    height: 22px;
     border-radius: 22px;
     background-color: ${backgroundColor};
     margin-bottom: 5px;
     p {
       margin: 0;
+      white-space: nowrap;
+      display: block;
       overflow: hidden;
       text-overflow: ellipsis;
       text-align: center;
-      line-height: 23px;
+      line-height: 22px;
+      font-size: 14px;
       color: ${color};
     }
   `,
@@ -67,8 +68,9 @@ export default function CalendarCell({
       <p css={style.day}>{day}</p>
       <div css={style.postsContainer}>
         {posts.map((post) => {
-          if (globalFilter[post.type]) return <CellPost key={`post-${post.id}`} post={post} />;
-          return <div key={`post-${post.id}`} />;
+          if (globalFilter[post.category])
+            return <CellPost key={`post-${post.mentoringId}`} post={post} />;
+          return <div key={`post-${post.mentoringId}`} />;
         })}
       </div>
     </div>
@@ -79,9 +81,9 @@ export default function CalendarCell({
 
 function CellPost({ post }: CellPostProps) {
   const backgroundColor =
-    post.type === 'mentoring'
+    post.category === 'MENTORING'
       ? GLOBAL_COLOR.blue
-      : post.type === 'meetup'
+      : post.category === 'MEETUP'
       ? GLOBAL_COLOR.purple
       : GLOBAL_COLOR.gray;
   return (

@@ -3,7 +3,7 @@ import PostDetail from '@/components/PostDetail';
 import SideBar from '@/components/SideBar';
 import ToggleButton from '@/components/ToggleButton';
 import UserInfo from '@/components/UserInfo';
-import { globalDate, globalPostFilter } from '@/states/dateContext';
+import { forceReload, globalDate, globalPostFilter } from '@/states/dateContext';
 import { currentUser } from '@/states/userContext';
 import { GLOBAL_COLOR } from '@/utils/color';
 import { css } from '@emotion/react';
@@ -13,7 +13,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 
 const style = {
   sidebar: (show: boolean) => css`
-    @media only screen and (max-width: 1300px) {
+    @media only screen and (max-width: 1750px) {
       left: 50%;
       transform: translate(-50% ${show ? '' : ',-50px'});
       margin-left: 0;
@@ -29,9 +29,12 @@ const style = {
     opacity: ${show ? '100%' : '70%'};
   `,
   mainFeed: css`
+    @media only screen and (max-width: 1750px) {
+      align-self: center;
+    }
     padding: 10px;
     overflow-y: auto;
-    max-width: 1050px;
+    max-width: 1080px;
     width: 100%;
     height: 100%;
     overscroll-behavior-block: contain;
@@ -41,7 +44,7 @@ const style = {
     flex-direction: column;
   `,
   month: css`
-    @media only screen and (max-width: 1300px) {
+    @media only screen and (max-width: 1750px) {
       align-self: center;
     }
     align-self: flex-end;
@@ -67,7 +70,7 @@ const style = {
   container: css`
     position: fixed;
     display: flex;
-    @media only screen and (max-width: 1300px) {
+    @media only screen and (max-width: 1750px) {
       flex-direction: column;
     }
     flex-direction: row;
@@ -79,8 +82,9 @@ const style = {
   `,
   leftInfo: css`
     position: relative;
-    @media only screen and (max-width: 1300px) {
+    @media only screen and (max-width: 1750px) {
       align-self: center;
+      display: none;
     }
     padding: 20px 0 0 0;
     max-width: 650px;
@@ -88,7 +92,7 @@ const style = {
   `,
 
   line: (vertical: boolean) => css`
-    @media only screen and (max-width: 1300px) {
+    @media only screen and (max-width: 1750px) {
       display: ${vertical ? 'none' : 'block'};
     }
     box-sizing: border-box;
@@ -99,31 +103,73 @@ const style = {
   `,
 
   calendarTable: css`
-    @media only screen and (max-width: 1300px) {
-      overflow-y: visible;
-    }
-    overflow-x: auto;
+    width: 1050px;
+    overflow-y: visible;
   `,
 
   root: css`
     overscroll-behavior: none;
   `,
+
+  logo: css`
+    width: 100%;
+    text-align: center;
+    margin-top: 50px;
+    font-weight: bolder;
+    font-size: 50px;
+    color: #929292;
+    p {
+      font-size: 15px;
+      font-weight: lighter;
+    }
+  `,
+
+  filterButton: css`
+    :hover {
+      background: black;
+      color: white;
+    }
+    border: solid black 1px;
+    background: white;
+    margin-right: 20px;
+  `,
 };
 
 export default function Home() {
-  const [date, setDate] = useRecoilState(globalDate);
   const [postView, setPostView] = useState<Post | null>(null);
+  const [reload, setReload] = useRecoilState(forceReload);
   const [showSideBar, setShowSideBar] = useState<boolean>(false);
   const [globalFilter, setGlobalFilter] = useRecoilState(globalPostFilter);
+  const [date, setDate] = useRecoilState(globalDate);
   const user = useRecoilValue(currentUser);
   const router = useRouter();
+
+  if (user.memberId === -1) {
+    if (router.isReady) router.push('/login');
+    return <>Login required</>;
+  }
 
   return (
     <div css={style.root}>
       <div css={style.container}>
         <div css={style.leftInfo}>
-          <UserInfo onClick={() => router.push(user.userid === -1 ? '/login' : '/profile')} />
+          <UserInfo onClick={() => router.push(user.memberId === -1 ? '/login' : '/profile')} />
           <div css={style.line(false)} />
+          <div css={style.logo}>
+            소마인더
+            <br />
+            SWMinder
+            <p>
+              front-end
+              <br />
+              남동훈 윤용재 홍정희
+            </p>
+            <p>
+              back-end
+              <br />
+              김현철 최정용
+            </p>
+          </div>
         </div>
         <div css={style.line(true)} />
         <div css={style.mainFeed}>
@@ -138,22 +184,36 @@ export default function Home() {
               </button>
             </div>
             <div css={style.filters}>
+              <button css={style.filterButton} onClick={() => setReload(reload + 1)}>
+                새로고침
+              </button>
               <ToggleButton
                 text="특강"
                 color={GLOBAL_COLOR.blue}
-                value={globalFilter.mentoring}
-                onToggle={(flag) => setGlobalFilter({ ...globalFilter, mentoring: flag })}
+                value={globalFilter.MENTORING}
+                onToggle={(flag) => setGlobalFilter({ ...globalFilter, MENTORING: flag })}
               />
               <ToggleButton
                 text="모임"
-                value={globalFilter.meetup}
                 color={GLOBAL_COLOR.purple}
-                onToggle={(flag) => setGlobalFilter({ ...globalFilter, meetup: flag })}
+                value={globalFilter.MEETUP}
+                onToggle={(flag) => setGlobalFilter({ ...globalFilter, MEETUP: flag })}
+              />
+              <ToggleButton
+                text="게시글"
+                color={GLOBAL_COLOR.gray}
+                value={globalFilter.BOARD}
+                onToggle={(flag) => setGlobalFilter({ ...globalFilter, BOARD: flag })}
               />
             </div>
           </div>
           <div css={style.calendarTable}>
-            <Calendar onClickCell={() => setShowSideBar(true)} />
+            <Calendar
+              onClickCell={(d: number) => {
+                setShowSideBar(true);
+                setDate(new Date(date.getFullYear(), date.getMonth(), d));
+              }}
+            />
           </div>
         </div>
 

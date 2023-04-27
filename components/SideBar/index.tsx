@@ -1,9 +1,8 @@
-import { globalDate, globalPostFilter } from '@/states/dateContext';
+import { globalDate, globalPostFilter, monthlyPosts } from '@/states/dateContext';
 import { dday, formatDate, getPostsByDate } from '@/utils/api';
 import { GLOBAL_COLOR } from '@/utils/color';
 import { css } from '@emotion/react';
-import { useEffect, useState } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useRecoilValueLoadable } from 'recoil';
 import Handle from '@/assets/drag_handle.svg';
 
 interface SideBarProps {
@@ -23,8 +22,8 @@ const style = {
     flex-direction: column;
     width: 100%;
     height: 100%;
-    border: solid 1px #bbbbbb;
-    background-color: white;
+    border: solid 1px #cacaca;
+    background-color: #ffffff;
     border-radius: 30px 30px 0 0;
   `,
   dateContainer: css`
@@ -59,7 +58,7 @@ const style = {
     padding: 10px;
     justify-content: space-around;
     align-items: center;
-    background-color: #e9e9e9;
+    background-color: #f8f8f8;
     border-radius: 20px;
     margin-top: 8px;
   `,
@@ -69,9 +68,9 @@ const style = {
       width: 50px;
       height: 50px;
       border-radius: 100%;
-      background-color: ${type === 'meetup'
+      background-color: ${type === 'MEETUP'
         ? GLOBAL_COLOR.purple
-        : type === 'mentoring'
+        : type === 'MENTORING'
         ? GLOBAL_COLOR.blue
         : GLOBAL_COLOR.gray};
       color: white;
@@ -126,14 +125,8 @@ const style = {
 
 export default function SideBar({ postCallback, handleCallback }: SideBarProps) {
   const [date, setDate] = useRecoilState(globalDate);
-  const [posts, setPosts] = useState<Post[]>([]);
+  const posts = useRecoilValueLoadable(monthlyPosts);
   const globalFilter = useRecoilValue(globalPostFilter);
-
-  useEffect(() => {
-    (async () => {
-      setPosts(await getPostsByDate(date));
-    })();
-  }, [date]);
 
   return (
     <div css={style.container}>
@@ -149,21 +142,26 @@ export default function SideBar({ postCallback, handleCallback }: SideBarProps) 
         <p>{`${date.getMonth() + 1}월 ${date.getDate()}일`}</p>
         <button
           onClick={() => {
-            setDate(new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1));
+            setDate(new Date(date.getFullYear(), date.getMonth(), date.getDate() - 1));
           }}
         >
           &gt;
         </button>
       </div>
       <div css={style.list}>
-        {posts.map((e) => {
-          return globalFilter[e.type] ? <PostItem onClick={postCallback} post={e} /> : <></>;
-        })}
+        {posts.state === 'hasValue' ? (
+          posts.getValue()[date.getDate() - 1].map((e) => {
+            return globalFilter[e.category] ? <PostItem onClick={postCallback} post={e} /> : <></>;
+          })
+        ) : (
+          <></>
+        )}
       </div>
     </div>
   );
 }
 
+//
 function PostItem({ post, onClick }: PostItemProps) {
   return (
     <div
@@ -172,22 +170,26 @@ function PostItem({ post, onClick }: PostItemProps) {
         onClick(post);
       }}
     >
-      <div css={style.leftInfo(post.type)}>
+      <div css={style.leftInfo(post.category)}>
         <div>
-          {post.type === 'meetup' ? '모임' : post.type === 'mentoring' ? '멘토링' : '게시글'}
+          {post.category === 'MEETUP'
+            ? '모임'
+            : post.category === 'MENTORING'
+            ? '멘토링'
+            : '게시글'}
         </div>
-        <p>{dday(post.scheduled)}</p>
+        <p>{dday(post.startTime)}</p>
       </div>
       <div css={style.rightInfo}>
         <p>{post.title}</p>
         <div>
           <p>{post.author}</p>
           <div css={style.line} />
-          <p>{`${post.currentCount}/${post.totalCount}`}</p>
+          <p>{`${post.joinCount}/${post.limitCount}`}</p>
           <div css={style.line} />
-          <p>{formatDate(post.created)}</p>
+          <p>{formatDate(post.startTime)}</p>
           <div css={style.line} />
-          <p>{`~${formatDate(post.scheduled)}`}</p>
+          <p>{`~${formatDate(post.startTime)}`}</p>
         </div>
       </div>
     </div>

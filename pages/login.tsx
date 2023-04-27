@@ -1,7 +1,9 @@
-import { login } from '@/utils/api';
+import { currentUser } from '@/states/userContext';
+import { getMemberProfile, login } from '@/utils/api';
 import { css } from '@emotion/react';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import React, { KeyboardEvent, useState } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 const style = css`
   text-align: center;
@@ -27,9 +29,34 @@ const style = css`
 `;
 
 export default function LoginPage() {
+  const [user, setUser] = useRecoilState(currentUser);
   const [userName, setUserName] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const router = useRouter();
+
+  const handler = async () => {
+    //TODO: handle exception
+    try {
+      if ((await login(userName, password)).status === 200) {
+        const newuser = await getMemberProfile();
+        setUser({
+          ...newuser,
+          username: newuser.username === undefined ? 'Guest' : newuser.username,
+          birth: new Date(newuser.birth),
+          skills: newuser.skills === undefined ? [] : newuser.skills,
+        });
+        router.push('/');
+      }
+    } catch (e) {
+      alert('로그인 실패!');
+    }
+  };
+
+  const keyHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handler();
+    }
+  };
 
   return (
     <div css={style}>
@@ -37,6 +64,7 @@ export default function LoginPage() {
       <input
         type="text"
         placeholder="아이디"
+        onKeyDown={keyHandler}
         onChange={(e) => {
           setUserName(e.target.value);
         }}
@@ -47,14 +75,15 @@ export default function LoginPage() {
         onChange={(e) => {
           setPassword(e.target.value);
         }}
+        onKeyDown={keyHandler}
       />
+      <button onClick={handler}>로그인</button>
       <button
         onClick={async () => {
-          //TODO: handle exception
-          if ((await login(userName, password)).status === 200) router.push('/');
+          router.push('/signup');
         }}
       >
-        로그인
+        회원가입
       </button>
     </div>
   );
