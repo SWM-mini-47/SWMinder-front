@@ -148,14 +148,14 @@ export default function Home() {
   if (user.memberId === -1) {
     (async () => {
       const newuser = await getMemberProfile();
-      console.log(newuser);
       if (newuser.memberId === undefined && router.isReady) router.push('/login');
-      setUser({
-        ...newuser,
-        username: newuser.username === undefined ? 'Guest' : newuser.username,
-        birth: new Date(newuser.birth),
-        skills: newuser.skills === undefined ? [] : newuser.skills,
-      });
+      else
+        setUser({
+          ...newuser,
+          username: newuser.username === undefined ? 'Guest' : newuser.username,
+          birth: new Date(newuser.birth),
+          skills: newuser.skills === undefined ? [] : newuser.skills,
+        });
     })();
     return <></>;
   }
