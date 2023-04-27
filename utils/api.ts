@@ -79,3 +79,7 @@ export function dday(date: Date) {
   const diff = Math.ceil(timeDiff / (1000 * 3600 * 24));
   return `D${diff === 0 ? `-${diff}` : diff > 0 ? `+${diff}` : diff}`;
 }
+
+export async function getMemberProfile(): Promise<User> {
+  return (await axiosInstance.get('/member/info')).data;
+}

@@ -1,5 +1,5 @@
 import { currentUser } from '@/states/userContext';
-import { login } from '@/utils/api';
+import { getMemberProfile, login } from '@/utils/api';
 import { css } from '@emotion/react';
 import { useRouter } from 'next/router';
 import React, { KeyboardEvent, useState } from 'react';
@@ -38,7 +38,13 @@ export default function LoginPage() {
     //TODO: handle exception
     try {
       if ((await login(userName, password)).status === 200) {
-        setUser({ ...user, userid: 0, username: userName });
+        const newuser = await getMemberProfile();
+        setUser({
+          ...newuser,
+          username: newuser.username === undefined ? 'Guest' : newuser.username,
+          birth: new Date(newuser.birth),
+          skills: newuser.skills === undefined ? [] : newuser.skills,
+        });
         router.push('/');
       }
     } catch (e) {
